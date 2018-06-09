@@ -11,3 +11,7 @@
 .button {
 	padding-top: 0;
 }
+
+.error-hide {
+	display: none;
+}

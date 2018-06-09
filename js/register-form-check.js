@@ -20,38 +20,68 @@ $(document).ready(function() {
 		}
 
 		var _actionOnSubmit = function (event) {
-			event.preventDefault();
+			
 			var _inputLoginValue = _inputLogin.val().trim(),//value поля ввода логина
 				_inputPasswordValue = _inputPassword.val(),//value поля ввода пароля
 				_errorText = "",
-				_tooltipe = $('<div class="error"></div>'),
-				_emailBusy = $('<div class="error error--with-desc">Данный email уже занят</div><div class="error-description"><p>Используйте другой email чтобы создать новый аккаунт.</p><p>Или воспользуйтесь <a href="#">восстановлением пароля</a>, чтобы войти на сайт.</p></div>');
+				_tooltipe = $('<div class="error error-hide"></div>'),
+				_emailBusy = $('<div class="error error--with-desc error-hide">Данный email уже занят</div><div class="error-description"><p>Используйте другой email чтобы создать новый аккаунт.</p><p>Или воспользуйтесь <a href="#">восстановлением пароля</a>, чтобы войти на сайт.</p></div>');
 			if (_inputLoginValue.length === 0) {
-				_tooltipe.remove();
-				console.log(_tooltipe);
+				
+				$(".error").remove();
 				_errorText = _inputLogin.data('email-error');
 				_tooltipe.text(_errorText);
+				$('.plate__heading').after(_tooltipe);
+				_tooltipe.fadeIn();
+				event.preventDefault();
+
+			} else if (!(_patternEmail.test(_inputLoginValue) && _inputLoginValue.length > 0)) {
+				
+				$(".error").remove();
+				_errorText = "Неверный формат email";
+				_tooltipe.text(_errorText);
 				_inputLogin.before(_tooltipe);
+				event.preventDefault();
 
-			} //else if (!(_patternEmail.test(_inputLoginValue) && _inputLoginValue.length > 0)) {
-			// 	_tooltipe.remove();
-			// 	_errorText = "Неверный формат email";
-			// 	_tooltipe.text(_errorText);
-			// 	_inputLogin.before(_tooltipe);
+			}
 
-			// }
+			if (_inputPasswordValue.length === 0) {
+				
+				$(".error").remove();
+				_errorText = _inputPassword.data('password-error');
+				_tooltipe.text(_errorText);
+				_inputLogin.before(_tooltipe);
+				_tooltipe.fadeIn();
+				event.preventDefault();
 
-			// if (_inputPasswordValue.length === 0) {
-			// 	_tooltipe.remove();
-			// 	_errorText = _inputPassword.data('password-error');
-			// 	_tooltipe.text(_errorText);
-			// 	// _inputLogin.before(_tooltipe);
-			// }
+			}
+
+			if (_inputLoginValue == "mail@mail.com" && _inputPasswordValue.length > 0) {
+				
+				$(".error").remove();
+				$(".error-description").remove();
+				_inputLogin.before(_emailBusy);
+				_emailBusy.fadeIn();
+				event.preventDefault();
+
+			} else {
+				
+				$(".error--with-desc").remove();
+				$(".error-description").remove();
+
+			}
 
 			_inputLogin.on("focus", function(){
+				
 				_tooltipe.remove();
-			})
-		
+
+			});
+
+			_inputPassword.on("focus", function(){
+
+				_tooltipe.remove();
+				
+			});
 		
 		}
 
@@ -64,7 +94,4 @@ $(document).ready(function() {
 	// Запускаем модуль
 	registrFormValidate.init();
 
-
 });
-
-
