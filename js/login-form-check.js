@@ -5,7 +5,7 @@ $(document).ready(function() {
 		// Переменные модуля
 		var _loginForm = $('#login-form'),
 			_patternEmail = /^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i;
-			_inputLogin = $('[name="name"]'),//поле ввода логина
+			_inputLogin = $('[name="email"]'),//поле ввода логина
 			_inputPassword = $('[name="password"]'),// поле ввода пароля
 			_errorEmail = $("#error-email"), //блок с ошибкой Введите email
 			_errorFormatEmail = $("#error-format-email"), // блок с ошибкой Неверный формат email
@@ -52,9 +52,12 @@ $(document).ready(function() {
 
     		// если логин или пароль не соответствует 
     		if (_inputLoginValue != "mail@mail.com" || _inputPasswordValue != 123) {
-    			_errorEmailPassword.fadeIn();// показываем блок с ошибкой Неверный email или пароль
-    			_errorMessage.fadeIn(); // показываем блок с сообщением об ошибке ввода
-    			event.preventDefault();
+    			if (_patternEmail.test(_inputLoginValue) && _inputPasswordValue.length > 0) {
+    				_errorEmailPassword.fadeIn();
+    				_errorMessage.fadeIn();
+    				event.preventDefault();
+    			}
+    			
     		}
 
     		// по фокусу в поле логина убираем блоки с ошибками
